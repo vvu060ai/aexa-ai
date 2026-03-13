@@ -542,7 +542,7 @@ export default function Home() {
                 <div className="w-8 h-8 rounded-lg bg-accent-primary flex items-center justify-center">
                   <span className="text-white font-black text-lg">A</span>
                 </div>
-                Aexa Studio
+                Aexa AI
               </h2>
               <p className="text-foreground-muted leading-relaxed">
                 Empowering businesses with intelligent software infrastructure. We automate the mundane so you can focus on the extraordinary.
