@@ -1,0 +1,158 @@
+"use client";
+
+import React, { useState } from 'react';
+import { Users, Mail, MessageSquare, Send, CheckCircle2, Loader2, Check } from 'lucide-react';
+import { Ripple } from "@/components/magicui/ripple";
+import { pageContent } from '@/data/pageContent';
+import { Icon } from '@/components/ui/Icon';
+import { RippleButton } from '@/components/ui/ripple-button';
+import { cn } from "@/lib/utils";
+
+export const ContactSection = React.memo(() => {
+  const { contact } = pageContent;
+  const [isSending, setIsSending] = useState(false);
+  const [isSent, setIsSent] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isSending || isSent) return;
+
+    setIsSending(true);
+    // Mock sending animation
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Clear the form
+    (e.target as HTMLFormElement).reset();
+    
+    setIsSending(false);
+    setIsSent(true);
+
+    // Reset after 5 seconds
+    setTimeout(() => setIsSent(false), 5000);
+  };
+
+  return (
+    <section id="contact" className="scroll-section py-32 border-b border-border bg-background relative overflow-hidden">
+      <Ripple mainCircleOpacity={0.5} numCircles={8} className="z-0 opacity-100" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(0,184,162,0.08)_0%,rgba(0,0,0,0)_60%)] pointer-events-none"></div>
+
+      <div className="container mx-auto px-4 z-10 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center max-w-7xl mx-auto">
+
+          <div className="flex flex-col gap-12">
+            <div className="scroll-header">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
+                {contact.header.titleParts[0]} <span className="text-accent-primary text-glow">{contact.header.titleHighlight}</span> {contact.header.titleParts[1]}
+              </h2>
+              <p className="text-xl text-foreground-muted max-w-md">{contact.header.subtitle}</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              {contact.stats.map((stat, i) => (
+                <div key={i} className="scroll-card card-surface p-8 flex flex-col gap-4 hover:scale-105 transition-all duration-300 border border-border/50 group">
+                  <div className="flex items-center justify-start group-hover:scale-110 transition-transform duration-300">
+                    <div className="animate-float" style={{ animationDelay: stat.delay }}>
+                      <Icon name={stat.icon} className="w-12 h-12 object-contain" priority={false} />
+                    </div>
+                  </div>
+                  <div>
+                    <span className="block text-3xl font-bold mb-1">{stat.metric}</span>
+                    <span className="text-sm font-bold text-foreground block uppercase tracking-wider leading-relaxed">{stat.label}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="scroll-card card-surface p-10 lg:p-12 relative overflow-hidden group/form shadow-2xl">
+            <div className="relative z-10">
+              <div className="mb-10">
+                <h3 className="text-3xl font-bold mb-3">{contact.form.title}</h3>
+                <p className="text-foreground-muted">{contact.form.subtitle}</p>
+              </div>
+
+              <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">Full Name</label>
+                  <div className="relative">
+                    <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted group-focus-within/field:text-accent-primary transition-colors" />
+                    <input
+                      required
+                      type="text"
+                      placeholder="John Doe"
+                      className="w-full bg-background border border-border rounded-xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all text-lg"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">Email Address</label>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted group-focus-within/field:text-accent-primary transition-colors" />
+                    <input
+                      required
+                      type="email"
+                      placeholder="john@company.com"
+                      className="w-full bg-background border border-border rounded-xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all text-lg"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">What Would You Like To Automate?</label>
+                  <div className="relative">
+                    <MessageSquare className="absolute left-4 top-5 w-5 h-5 text-foreground-muted group-focus-within/field:text-accent-primary transition-colors" />
+                    <textarea
+                      required
+                      rows={4}
+                      placeholder="Example: I want to automate WhatsApp lead follow-ups."
+                      className="w-full bg-background border border-border rounded-xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all text-lg resize-none"
+                    ></textarea>
+                  </div>
+                </div>
+
+                <RippleButton
+                  type="submit"
+                  disabled={isSending || isSent}
+                  rippleColor="rgba(255, 255, 255, 0.4)"
+                  className={cn(
+                    "mt-4 text-white font-black py-5 rounded-xl text-xl transition-all shadow-lg shadow-accent-primary/20 hover:shadow-accent-primary/40 border-none",
+                    isSent ? "bg-green-500 shadow-green-500/20" : "bg-accent-primary",
+                    (isSending || isSent) && "cursor-not-allowed opacity-90"
+                  )}
+                >
+                  {isSending ? (
+                    <>
+                      Sending Idea... <Loader2 className="w-5 h-5 animate-spin" />
+                    </>
+                  ) : isSent ? (
+                    <>
+                      Idea Sent! <Check className="w-5 h-5" />
+                    </>
+                  ) : (
+                    <>
+                      {contact.form.buttonText} <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </>
+                  )}
+                </RippleButton>
+
+                <div className="mt-2 flex flex-col items-center gap-3">
+                  <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] text-foreground-muted">
+                    <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-accent-primary" /> Free consultation</span>
+                    <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-accent-primary" /> No obligation</span>
+                  </div>
+                  <p className="text-xs font-medium text-foreground-muted/50 py-1 px-3 border border-border/30 rounded-full italic">
+                    We&apos;ll reply within 24 hours.
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+});
+
+ContactSection.displayName = "ContactSection";
