@@ -1,13 +1,15 @@
 "use client";
 
-import React from 'react';
-import { ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { ExternalLink, Mic } from 'lucide-react';
 import { FocusCards } from "@/components/ui/focus-cards";
 import { pageContent } from '@/data/pageContent';
 import { Icon } from '@/components/ui/Icon';
+import { VoiceAgentDemo } from '@/components/VoiceAgentDemo';
 
 export const PortfolioSection = React.memo(() => {
   const { portfolio } = pageContent;
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
 
   const renderFooter = (type: string) => {
     switch (type) {
@@ -57,6 +59,24 @@ export const PortfolioSection = React.memo(() => {
             </button>
           </div>
         );
+      case 'voiceagent':
+        return (
+          <div className="flex justify-between items-center w-full">
+            <div className="flex items-center gap-2 text-[10px] font-bold text-accent-primary">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div> Agent Online
+            </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDemoOpen(true);
+              }}
+              className="text-accent-primary font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-300 group"
+            >
+              <Mic className="w-3 h-3 group-hover:text-green-400 transition-colors" />
+              Try Live Demo
+            </button>
+          </div>
+        );
       default:
         return null;
     }
@@ -72,7 +92,22 @@ export const PortfolioSection = React.memo(() => {
       </div>
     ),
     description: proj.description,
-    footer: renderFooter(proj.footerType)
+    footer: renderFooter(proj.footerType),
+    action: proj.footerType === 'voiceagent' ? (
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsDemoOpen(true);
+        }}
+        className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm transition-all duration-300 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-[0.98] group"
+      >
+        <div className="relative">
+          <Mic className="w-5 h-5" />
+          <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+        </div>
+        Try Live Demo
+      </button>
+    ) : undefined
   }));
 
   return (
@@ -89,6 +124,9 @@ export const PortfolioSection = React.memo(() => {
           <FocusCards cards={projectCards} />
         </div>
       </div>
+
+      {/* Voice Agent Demo Modal */}
+      <VoiceAgentDemo isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </section>
   );
 });

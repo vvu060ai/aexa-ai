@@ -66,6 +66,11 @@ export const Card = React.memo(
             {card.description}
           </p>
 
+          {/* Always-visible action */}
+          {card.action && (
+            <div className="mb-4">{card.action}</div>
+          )}
+
           {/* Footer / Stats */}
           <div className={cn(
             "transition-all duration-500",
@@ -88,6 +93,7 @@ type CardType = {
   badge?: string;
   icon?: React.ReactNode;
   footer?: React.ReactNode;
+  action?: React.ReactNode;
 };
 
 export function FocusCards({ cards }: { cards: CardType[] }) {

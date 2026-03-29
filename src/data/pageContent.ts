@@ -140,6 +140,15 @@ export const pageContent = {
         iconDelay: "1.2s",
         description: "Bulk produce social media posts, blog articles, and ad copies in your brand voice. Includes an AI image engine to create matching visual assets in seconds.",
         footerType: "content"
+      },
+      {
+        title: "AI Booking Assistant",
+        src: "/portfolio/booking-agent.webp",
+        badge: "Live Demo",
+        icon: "chat-bubble",
+        iconDelay: "1.6s",
+        description: "A voice-powered AI agent that can check, book, update, and cancel calendar appointments in real-time. Try the live demo and speak directly with the AI.",
+        footerType: "voiceagent"
       }
     ]
   },
