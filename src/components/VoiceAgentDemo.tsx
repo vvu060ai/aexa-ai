@@ -16,9 +16,11 @@ interface TranscriptEntry {
 interface VoiceAgentDemoProps {
   isOpen: boolean;
   onClose: () => void;
+  agentId?: string;
+  title?: string;
 }
 
-export function VoiceAgentDemo({ isOpen, onClose }: VoiceAgentDemoProps) {
+export function VoiceAgentDemo({ isOpen, onClose, agentId, title }: VoiceAgentDemoProps) {
   const [callStatus, setCallStatus] = useState<CallStatus>("idle");
   const [transcripts, setTranscripts] = useState<TranscriptEntry[]>([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -93,21 +95,21 @@ export function VoiceAgentDemo({ isOpen, onClose }: VoiceAgentDemoProps) {
 
   const startCall = useCallback(async () => {
     if (!vapiRef.current) return;
-    const agentId = process.env.NEXT_PUBLIC_VAPI_BOOKING_AGENT_ID;
-    if (!agentId) {
-      console.error("NEXT_PUBLIC_VAPI_BOOKING_AGENT_ID is not set");
+    const resolvedAgentId = agentId || process.env.NEXT_PUBLIC_VAPI_BOOKING_AGENT_ID;
+    if (!resolvedAgentId) {
+      console.error("Agent ID is not set");
       return;
     }
 
     setCallStatus("connecting");
     setTranscripts([]);
     try {
-      await vapiRef.current.start(agentId);
+      await vapiRef.current.start(resolvedAgentId);
     } catch (e) {
       console.error("Failed to start call:", e);
       setCallStatus("idle");
     }
-  }, []);
+  }, [agentId]);
 
   const endCall = useCallback(() => {
     if (!vapiRef.current) return;
@@ -164,7 +166,7 @@ export function VoiceAgentDemo({ isOpen, onClose }: VoiceAgentDemoProps) {
                   <Calendar className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold text-lg">AI Booking Assistant</h3>
+                  <h3 className="text-white font-semibold text-lg">{title || "AI Booking Assistant"}</h3>
                   <p className="text-gray-500 text-xs">
                     {callStatus === "active"
                       ? "Call in progress..."

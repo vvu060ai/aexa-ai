@@ -10,9 +10,11 @@ import { VoiceAgentDemo } from '@/components/VoiceAgentDemo';
 export const PortfolioSection = React.memo(() => {
   const { portfolio } = pageContent;
   const [isDemoOpen, setIsDemoOpen] = useState(false);
+  const [activeAgentId, setActiveAgentId] = useState<string | undefined>(undefined);
+  const [activeDemoTitle, setActiveDemoTitle] = useState<string | undefined>(undefined);
 
-  const renderFooter = (type: string) => {
-    switch (type) {
+  const renderFooter = (proj: any) => {
+    switch (proj.footerType) {
       case 'support':
         return (
           <div className="flex justify-between items-center w-full">
@@ -68,6 +70,8 @@ export const PortfolioSection = React.memo(() => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                setActiveAgentId(proj.agentId);
+                setActiveDemoTitle(proj.title);
                 setIsDemoOpen(true);
               }}
               className="text-accent-primary font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-300 group"
@@ -92,11 +96,13 @@ export const PortfolioSection = React.memo(() => {
       </div>
     ),
     description: proj.description,
-    footer: renderFooter(proj.footerType),
+    footer: renderFooter(proj),
     action: proj.footerType === 'voiceagent' ? (
       <button
         onClick={(e) => {
           e.stopPropagation();
+          setActiveAgentId((proj as any).agentId);
+          setActiveDemoTitle(proj.title);
           setIsDemoOpen(true);
         }}
         className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm transition-all duration-300 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-[0.98] group"
@@ -126,7 +132,12 @@ export const PortfolioSection = React.memo(() => {
       </div>
 
       {/* Voice Agent Demo Modal */}
-      <VoiceAgentDemo isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
+      <VoiceAgentDemo 
+        isOpen={isDemoOpen} 
+        onClose={() => setIsDemoOpen(false)} 
+        agentId={activeAgentId}
+        title={activeDemoTitle}
+      />
     </section>
   );
 });

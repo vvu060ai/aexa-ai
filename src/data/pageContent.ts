@@ -106,49 +106,24 @@ export const pageContent = {
     },
     projects: [
       {
-        title: "AI Customer Support Bot",
-        src: "/portfolio/support.png",
-        badge: "Active Prototype",
-        icon: "chat-bubble",
-        iconDelay: "0s",
-        description: "A high-intelligence chat agent handling 90% of support tickets automatically through WhatsApp and Web integrations. Built-in sentiment analysis ensures complex issues reach human agents instantly.",
-        footerType: "support"
-      },
-      {
-        title: "AI Lead Gen Automation",
-        src: "/portfolio/leadgen.png",
-        badge: "Growth Engine",
-        icon: "rocket",
-        iconDelay: "0.4s",
-        description: "Autonomous workflow that scrapers high-intent leads across LinkedIn and Twitter, scores them using AI, and initiates personalized outreach sequences that feel human.",
-        footerType: "leadgen"
-      },
-      {
-        title: "Sales Dashboard",
-        src: "/portfolio/dashboard.png",
-        badge: "Data Intelligence",
-        icon: "wallet",
-        iconDelay: "0.8s",
-        description: "Real-time visibility into your entire sales funnel. Integrated with your CRM and WhatsApp to show bottlenecks, agent performance, and revenue forecasting at a glance.",
-        footerType: "dashboard"
-      },
-      {
-        title: "Content Generation System",
-        src: "/portfolio/content.png",
-        badge: "Creative AI",
-        icon: "pencil",
-        iconDelay: "1.2s",
-        description: "Bulk produce social media posts, blog articles, and ad copies in your brand voice. Includes an AI image engine to create matching visual assets in seconds.",
-        footerType: "content"
-      },
-      {
         title: "AI Booking Assistant",
         src: "/portfolio/booking-agent.webp",
         badge: "Live Demo",
         icon: "chat-bubble",
         iconDelay: "1.6s",
         description: "A voice-powered AI agent that can check, book, update, and cancel calendar appointments in real-time. Try the live demo and speak directly with the AI.",
-        footerType: "voiceagent"
+        footerType: "voiceagent",
+        agentId: "1a1e4be8-ad23-4f77-b3a5-14bada886f47"
+      },
+      {
+        title: "Brightsmile Dental Clinic",
+        src: "/portfolio/support.png",
+        badge: "Live Demo",
+        icon: "chat-bubble",
+        iconDelay: "2.0s",
+        description: "A specialized AI agent tailored for Brightsmile Dental Clinic. It can assist patients with scheduling dental appointments, answering clinic-specific questions, and managing check-ups.",
+        footerType: "voiceagent",
+        agentId: "69286b58-d357-4099-b30a-c6f42a69ca22"
       }
     ]
   },
