@@ -1,17 +1,23 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ExternalLink, Mic } from 'lucide-react';
+import { ExternalLink, Mic, Sparkles, Globe } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
+
 import { FocusCards } from "@/components/ui/focus-cards";
 import { pageContent } from '@/data/pageContent';
 import { Icon } from '@/components/ui/Icon';
 import { VoiceAgentDemo } from '@/components/VoiceAgentDemo';
+import { InvoiceExtractDemo } from '@/components/InvoiceExtractDemo';
 
 export const PortfolioSection = React.memo(() => {
   const { portfolio } = pageContent;
   const [isDemoOpen, setIsDemoOpen] = useState(false);
   const [activeAgentId, setActiveAgentId] = useState<string | undefined>(undefined);
   const [activeDemoTitle, setActiveDemoTitle] = useState<string | undefined>(undefined);
+  const [isInvoiceDemoOpen, setIsInvoiceDemoOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'all' | 'agent' | 'website'>('all');
 
   const renderFooter = (proj: any) => {
     switch (proj.footerType) {
@@ -81,17 +87,53 @@ export const PortfolioSection = React.memo(() => {
             </button>
           </div>
         );
+      case 'invoiceextract':
+        return (
+          <div className="flex justify-between items-center w-full">
+            <div className="flex items-center gap-2 text-[10px] font-bold text-violet-400">
+              <div className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse"></div> AI Ready
+            </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsInvoiceDemoOpen(true);
+              }}
+              className="text-violet-400 font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-300 group"
+            >
+              <Sparkles className="w-3 h-3 group-hover:text-violet-300 transition-colors" />
+              Try Live Demo
+            </button>
+          </div>
+        );
+      case 'website':
+        return (
+          <div className="flex justify-between items-center w-full">
+            <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-400">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div> Live
+            </div>
+            <a
+              href={(proj as any).url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-emerald-400 font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-300"
+            >
+              Visit Site <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        );
       default:
         return null;
     }
   };
 
-  const projectCards = portfolio.projects.map(proj => ({
+  const allCards = portfolio.projects.map(proj => ({
     title: proj.title,
     src: proj.src,
     badge: proj.badge,
+    category: (proj as any).category ?? 'agent',
     icon: (
-      <div className="animate-float" style={{ animationDelay: proj.iconDelay }}>
+      <div>
         <Icon name={proj.icon} className="w-10 h-10" />
       </div>
     ),
@@ -113,8 +155,35 @@ export const PortfolioSection = React.memo(() => {
         </div>
         Try Live Demo
       </button>
+    ) : proj.footerType === 'invoiceextract' ? (
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsInvoiceDemoOpen(true);
+        }}
+        className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-400 hover:to-purple-500 text-white font-bold text-sm transition-all duration-300 shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 hover:scale-[1.02] active:scale-[0.98] group"
+      >
+        <Sparkles className="w-5 h-5" />
+        Try Live Demo
+      </button>
+    ) : proj.footerType === 'website' ? (
+      <a
+        href={(proj as any).url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-sm transition-all duration-300 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98]"
+      >
+        <Globe className="w-5 h-5" />
+        Visit Live Site
+        <ExternalLink className="w-4 h-4" />
+      </a>
     ) : undefined
   }));
+
+  const projectCards = allCards.filter(c =>
+    activeTab === 'all' || c.category === activeTab
+  );
 
   return (
     <section id="portfolio" className="scroll-section py-32 border-b border-border bg-background relative overflow-hidden">
@@ -126,17 +195,44 @@ export const PortfolioSection = React.memo(() => {
           <p className="text-xl text-foreground-muted max-w-2xl mx-auto">{portfolio.header.subtitle}</p>
         </div>
 
+        <div className="flex justify-center mb-12">
+          <div className="flex gap-1 p-1 rounded-full bg-white/5 border border-border">
+            {(['all', 'agent', 'website'] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={cn(
+                  "relative px-6 py-2 rounded-full text-sm font-semibold transition-colors duration-200 z-0",
+                  activeTab === tab ? "text-background" : "text-foreground-muted hover:text-foreground"
+                )}
+              >
+                {activeTab === tab && (
+                  <motion.div
+                    layoutId="tab-indicator"
+                    className="absolute inset-0 rounded-full bg-accent-primary -z-10"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+                  />
+                )}
+                {tab === 'all' ? 'All' : tab === 'agent' ? 'Agents' : 'Websites'}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="max-w-7xl mx-auto">
           <FocusCards cards={projectCards} />
         </div>
       </div>
 
-      {/* Voice Agent Demo Modal */}
-      <VoiceAgentDemo 
-        isOpen={isDemoOpen} 
-        onClose={() => setIsDemoOpen(false)} 
+      <VoiceAgentDemo
+        isOpen={isDemoOpen}
+        onClose={() => setIsDemoOpen(false)}
         agentId={activeAgentId}
         title={activeDemoTitle}
+      />
+      <InvoiceExtractDemo
+        isOpen={isInvoiceDemoOpen}
+        onClose={() => setIsInvoiceDemoOpen(false)}
       />
     </section>
   );

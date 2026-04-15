@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -24,10 +25,13 @@ export const Card = React.memo(
       )}
     >
       {/* Background Image with Overlay */}
-      <img
+      <Image
         src={card.src}
         alt={card.title}
-        className="object-cover absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-110"
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        loading="lazy"
+        className="object-cover transition-transform duration-700 group-hover:scale-110"
       />
       
       {/* Dynamic Overlay */}
@@ -58,10 +62,12 @@ export const Card = React.memo(
             </h3>
           </div>
 
-          {/* Description - always visible but maybe slightly faded when not hovered? */}
+          {/* Description — always visible on mobile, reveal on hover on desktop */}
           <p className={cn(
             "text-gray-300 leading-relaxed text-sm transition-all duration-500",
-            hovered === index ? "opacity-100 max-h-40 mb-6" : "opacity-0 max-h-0 overflow-hidden"
+            hovered === index
+              ? "opacity-100 max-h-40 mb-6"
+              : "opacity-100 max-h-40 mb-6 md:opacity-0 md:max-h-0 md:overflow-hidden md:mb-0"
           )}>
             {card.description}
           </p>
@@ -71,10 +77,12 @@ export const Card = React.memo(
             <div className="mb-4">{card.action}</div>
           )}
 
-          {/* Footer / Stats */}
+          {/* Footer / Stats — always visible on mobile, reveal on hover on desktop */}
           <div className={cn(
             "transition-all duration-500",
-            hovered === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            hovered === index
+              ? "opacity-100 translate-y-0"
+              : "opacity-100 translate-y-0 md:opacity-0 md:translate-y-4"
           )}>
             {card.footer && <div className="pt-4 border-t border-white/10">{card.footer}</div>}
           </div>

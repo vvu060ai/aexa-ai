@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { pageContent } from '@/data/pageContent';
 import { Icon } from '@/components/ui/Icon';
+import { LegalModal } from '@/components/ui/LegalModal';
 
 export const FooterSection = React.memo(() => {
-  const { footer } = pageContent;
+  const { footer, legal } = pageContent;
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -45,7 +46,7 @@ export const FooterSection = React.memo(() => {
               <div className="flex gap-4">
                 {footer.socials.map((social, i) => (
                   <Link key={i} href={social.link} className="w-10 h-10 rounded-full flex items-center justify-center bg-zinc-900 border border-white/5 hover:bg-accent-primary/10 hover:border-accent-primary/50 transition-all overflow-hidden p-2">
-                    <div className="animate-float" style={{ animationDelay: social.delay }}>
+                    <div>
                       <Icon name={social.icon} className="w-full h-full object-contain" priority={false} />
                     </div>
                   </Link>
@@ -60,9 +61,18 @@ export const FooterSection = React.memo(() => {
             {footer.legal.copyright.replace('{year}', new Date().getFullYear().toString())}
           </span>
           <div className="flex gap-8 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-            {footer.legal.links.map((link, i) => (
-              <Link key={i} href={link.link} className="hover:text-accent-primary transition-colors">{link.label}</Link>
-            ))}
+            <LegalModal
+              title="Privacy Policy"
+              lastUpdated={legal.privacyPolicy.lastUpdated}
+              sections={legal.privacyPolicy.sections}
+              trigger={<button className="hover:text-accent-primary transition-colors">Privacy Policy</button>}
+            />
+            <LegalModal
+              title="Terms of Service"
+              lastUpdated={legal.termsOfService.lastUpdated}
+              sections={legal.termsOfService.sections}
+              trigger={<button className="hover:text-accent-primary transition-colors">Terms of Service</button>}
+            />
           </div>
         </div>
       </div>

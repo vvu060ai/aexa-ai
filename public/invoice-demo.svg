@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="794" height="1050" viewBox="0 0 794 1050" font-family="Arial, sans-serif">
+
+  <!-- Page background -->
+  <rect width="794" height="1050" fill="#ffffff"/>
+
+  <!-- Header band -->
+  <rect x="0" y="0" width="794" height="130" fill="#0f172a"/>
+
+  <!-- Brand name -->
+  <text x="40" y="52" font-size="22" font-weight="bold" fill="#ffffff" letter-spacing="2">NEXUS SOFTWARE SOLUTIONS</text>
+  <text x="40" y="74" font-size="11" fill="#94a3b8">42, Tech Park Road, Whitefield, Bengaluru — 560066</text>
+  <text x="40" y="92" font-size="11" fill="#94a3b8">hello@nexussoftware.co  |  +91 98765 43210</text>
+  <text x="40" y="110" font-size="11" fill="#94a3b8">GSTIN: 29AABCN1234F1Z5</text>
+
+  <!-- INVOICE label top-right -->
+  <text x="754" y="65" font-size="38" font-weight="bold" fill="#06b6d4" text-anchor="end" letter-spacing="3">INVOICE</text>
+
+  <!-- Accent bar -->
+  <rect x="0" y="130" width="794" height="4" fill="#06b6d4"/>
+
+  <!-- Invoice meta box -->
+  <rect x="40" y="154" width="340" height="90" rx="6" fill="#f8fafc"/>
+  <text x="56" y="178" font-size="10" fill="#64748b" font-weight="bold" letter-spacing="1">BILLED TO</text>
+  <text x="56" y="198" font-size="14" font-weight="bold" fill="#0f172a">Momentum Digital Pvt. Ltd.</text>
+  <text x="56" y="216" font-size="11" fill="#475569">12, Cyber Hub, Sector 24, Gurugram — 122002</text>
+  <text x="56" y="232" font-size="11" fill="#475569">accounts@momentumdigital.in</text>
+
+  <!-- Invoice details box -->
+  <rect x="414" y="154" width="340" height="90" rx="6" fill="#f0f9ff"/>
+
+  <text x="430" y="178" font-size="10" fill="#64748b" font-weight="bold" letter-spacing="1">INVOICE DETAILS</text>
+
+  <text x="430" y="198" font-size="11" fill="#475569">Invoice Number</text>
+  <text x="744" y="198" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="end">INV-2024-1247</text>
+
+  <text x="430" y="215" font-size="11" fill="#475569">Invoice Date</text>
+  <text x="744" y="215" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="end">15 March 2024</text>
+
+  <text x="430" y="232" font-size="11" fill="#475569">Due Date</text>
+  <text x="744" y="232" font-size="11" font-weight="bold" fill="#e11d48" text-anchor="end">14 April 2024</text>
+
+  <!-- Status badge -->
+  <rect x="430" y="241" width="68" height="18" rx="9" fill="#fef9c3"/>
+  <text x="464" y="254" font-size="9" font-weight="bold" fill="#854d0e" text-anchor="middle">UNPAID</text>
+
+  <!-- Divider -->
+  <line x1="40" y1="264" x2="754" y2="264" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Table header -->
+  <rect x="40" y="274" width="714" height="32" rx="4" fill="#0f172a"/>
+  <text x="56" y="295" font-size="10" font-weight="bold" fill="#94a3b8" letter-spacing="1">DESCRIPTION</text>
+  <text x="490" y="295" font-size="10" font-weight="bold" fill="#94a3b8" letter-spacing="1" text-anchor="middle">QTY</text>
+  <text x="580" y="295" font-size="10" font-weight="bold" fill="#94a3b8" letter-spacing="1" text-anchor="end">RATE (INR)</text>
+  <text x="754" y="295" font-size="10" font-weight="bold" fill="#94a3b8" letter-spacing="1" text-anchor="end">AMOUNT (INR)</text>
+
+  <!-- Row 1 -->
+  <rect x="40" y="306" width="714" height="52" fill="#ffffff"/>
+  <text x="56" y="325" font-size="12" font-weight="bold" fill="#0f172a">Website Redesign &amp; Development</text>
+  <text x="56" y="343" font-size="10" fill="#64748b">Full responsive website with custom UI, CMS integration, and deployment</text>
+  <text x="490" y="335" font-size="12" fill="#0f172a" text-anchor="middle">1</text>
+  <text x="580" y="335" font-size="12" fill="#0f172a" text-anchor="end">45,000.00</text>
+  <text x="754" y="335" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="end">45,000.00</text>
+
+  <!-- Row 2 -->
+  <rect x="40" y="358" width="714" height="52" fill="#f8fafc"/>
+  <text x="56" y="377" font-size="12" font-weight="bold" fill="#0f172a">SEO Optimization Package</text>
+  <text x="56" y="395" font-size="10" fill="#64748b">3-month SEO campaign: keyword research, on-page, link building &amp; reporting</text>
+  <text x="490" y="387" font-size="12" fill="#0f172a" text-anchor="middle">3</text>
+  <text x="580" y="387" font-size="12" fill="#0f172a" text-anchor="end">6,000.00</text>
+  <text x="754" y="387" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="end">18,000.00</text>
+
+  <!-- Row 3 -->
+  <rect x="40" y="410" width="714" height="52" fill="#ffffff"/>
+  <text x="56" y="429" font-size="12" font-weight="bold" fill="#0f172a">Monthly Maintenance &amp; Support</text>
+  <text x="56" y="447" font-size="10" fill="#64748b">Bug fixes, security patches, uptime monitoring, and priority support</text>
+  <text x="490" y="439" font-size="12" fill="#0f172a" text-anchor="middle">1</text>
+  <text x="580" y="439" font-size="12" fill="#0f172a" text-anchor="end">12,000.00</text>
+  <text x="754" y="439" font-size="12" font-weight="bold" fill="#0f172a" text-anchor="end">12,000.00</text>
+
+  <!-- Row separator -->
+  <line x1="40" y1="462" x2="754" y2="462" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Totals block -->
+  <rect x="500" y="474" width="254" height="120" rx="6" fill="#f8fafc"/>
+
+  <text x="516" y="498" font-size="11" fill="#475569">Subtotal</text>
+  <text x="744" y="498" font-size="11" fill="#0f172a" text-anchor="end">75,000.00</text>
+
+  <line x1="516" y1="506" x2="744" y2="506" stroke="#e2e8f0" stroke-width="0.5"/>
+
+  <text x="516" y="525" font-size="11" fill="#475569">GST @ 18%</text>
+  <text x="744" y="525" font-size="11" fill="#0f172a" text-anchor="end">13,500.00</text>
+
+  <line x1="516" y1="533" x2="744" y2="533" stroke="#e2e8f0" stroke-width="0.5"/>
+
+  <text x="516" y="553" font-size="11" fill="#475569">Discount</text>
+  <text x="744" y="553" font-size="11" fill="#16a34a" text-anchor="end">— 0.00</text>
+
+  <!-- Total row -->
+  <rect x="500" y="566" width="254" height="28" rx="4" fill="#0f172a"/>
+  <text x="516" y="585" font-size="12" font-weight="bold" fill="#ffffff">TOTAL DUE</text>
+  <text x="744" y="585" font-size="14" font-weight="bold" fill="#06b6d4" text-anchor="end">₹ 88,500.00</text>
+
+  <!-- Payment info -->
+  <rect x="40" y="474" width="440" height="120" rx="6" fill="#f0fdf4"/>
+  <text x="56" y="498" font-size="10" fill="#64748b" font-weight="bold" letter-spacing="1">PAYMENT INFORMATION</text>
+  <text x="56" y="518" font-size="11" fill="#0f172a" font-weight="bold">Bank: HDFC Bank Ltd.</text>
+  <text x="56" y="536" font-size="11" fill="#475569">Account Name: Nexus Software Solutions LLP</text>
+  <text x="56" y="554" font-size="11" fill="#475569">Account No: 5020 0123 4567 89</text>
+  <text x="56" y="572" font-size="11" fill="#475569">IFSC Code: HDFC0001234  |  Branch: Whitefield, Bengaluru</text>
+
+  <!-- Terms -->
+  <line x1="40" y1="614" x2="754" y2="614" stroke="#e2e8f0" stroke-width="1"/>
+
+  <text x="40" y="634" font-size="10" fill="#64748b" font-weight="bold" letter-spacing="1">TERMS &amp; CONDITIONS</text>
+  <text x="40" y="652" font-size="10" fill="#64748b">1. Payment is due within 30 days of invoice date. Late payments attract 1.5% interest per month.</text>
+  <text x="40" y="668" font-size="10" fill="#64748b">2. All prices are in Indian Rupees (INR). GST applicable as per prevailing rates.</text>
+  <text x="40" y="684" font-size="10" fill="#64748b">3. Please include the invoice number in your payment reference.</text>
+
+  <!-- Signature block -->
+  <line x1="40" y1="720" x2="754" y2="720" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <text x="56" y="760" font-size="12" font-weight="bold" fill="#0f172a">Authorized By</text>
+  <text x="56" y="778" font-size="11" fill="#475569">Rahul Mehta — Director, Nexus Software Solutions LLP</text>
+  <text x="56" y="796" font-size="10" fill="#64748b">Digitally authorized on 15 March 2024</text>
+
+  <!-- Footer -->
+  <rect x="0" y="1020" width="794" height="30" fill="#0f172a"/>
+  <text x="397" y="1040" font-size="9" fill="#64748b" text-anchor="middle">Thank you for your business — nexussoftware.co | This is a computer-generated invoice.</text>
+
+</svg>

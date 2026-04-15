@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Vapi from "@vapi-ai/web";
 import { Mic, MicOff, Phone, PhoneOff, Loader2, X, Calendar, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { SlimScrollArea } from "@/components/ui/SlimScrollArea";
 
 type CallStatus = "idle" | "connecting" | "active" | "ended";
 
@@ -265,7 +266,7 @@ export function VoiceAgentDemo({ isOpen, onClose, agentId, title }: VoiceAgentDe
                   <MessageSquare className="w-3 h-3" />
                   <span>Live Transcript</span>
                 </div>
-                <div className="px-6 pb-6 max-h-48 overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-white/10">
+                <SlimScrollArea className="px-6 pb-6 max-h-48 space-y-3">
                   {transcripts.map((entry, i) => (
                     <motion.div
                       key={i}
@@ -288,7 +289,7 @@ export function VoiceAgentDemo({ isOpen, onClose, agentId, title }: VoiceAgentDe
                     </motion.div>
                   ))}
                   <div ref={transcriptEndRef} />
-                </div>
+                </SlimScrollArea>
               </div>
             )}
 

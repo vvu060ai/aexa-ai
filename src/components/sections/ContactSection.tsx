@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Users, Mail, Phone, MessageSquare, Send, CheckCircle2, Loader2, Check, AlertCircle } from 'lucide-react';
+import { Users, Mail, Phone, Building2, MessageSquare, Send, CheckCircle2, Loader2, Check, AlertCircle } from 'lucide-react';
 import { Ripple } from "@/components/magicui/ripple";
 import { pageContent } from '@/data/pageContent';
 import { Icon } from '@/components/ui/Icon';
@@ -15,6 +15,7 @@ export const ContactSection = React.memo(() => {
   const [countryCode, setCountryCode] = useState('+91');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [company, setCompany] = useState('');
   const [phone, setPhone] = useState('');
   const [idea, setIdea] = useState('');
   const [formError, setFormError] = useState('');
@@ -58,43 +59,32 @@ export const ContactSection = React.memo(() => {
     setIsSending(true);
 
     try {
-      const webhookUrl = process.env.NEXT_PUBLIC_CONTACT_WEBHOOK_URL;
-      if (webhookUrl) {
-        const response = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name,
-            email,
-            phone: phone.trim() ? `${countryCode}${phone}` : "",
-            idea: sanitizedIdea,
-          }),
-        });
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          phone: phone.trim() ? `${countryCode}${phone}` : "",
+          idea: sanitizedIdea,
+        }),
+      });
 
-        if (!response.ok) {
-          throw new Error('Unable to send the message. Please try again later.');
-        }
-
-        // Only clear and set sent state on success
-        (e.target as HTMLFormElement).reset();
-        setName('');
-        setEmail('');
-        setPhone('');
-        setIdea('');
-        setFormError('');
-        setCountryCode('+91');
-        setIsSent(true);
-
-        // Reset after 5 seconds
-        setTimeout(() => setIsSent(false), 5000);
-      } else {
-        // Mock sending animation if no webhook config
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        setIsSent(true);
-        setTimeout(() => setIsSent(false), 5000);
+      if (!response.ok) {
+        throw new Error('Unable to send the message. Please try again later.');
       }
+
+      (e.target as HTMLFormElement).reset();
+      setName('');
+      setEmail('');
+      setCompany('');
+      setPhone('');
+      setIdea('');
+      setFormError('');
+      setCountryCode('+91');
+      setIsSent(true);
+      setTimeout(() => setIsSent(false), 5000);
     } catch (error) {
       console.error('Error sending form:', error);
       setFormError("Don't worry! We're just having a small connection hiccup. Your idea is safe—please try clicking send again in a moment.");
@@ -143,79 +133,104 @@ export const ContactSection = React.memo(() => {
                 <p className="text-foreground-muted">{contact.form.subtitle}</p>
               </div>
 
-              <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">Full Name</label>
-                  <div className="relative">
-                    <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted group-focus-within/field:text-accent-primary transition-colors" />
-                    <input
-                      required
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="John Doe"
-                      className="w-full bg-background border border-border rounded-xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all text-lg"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">Email Address</label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted group-focus-within/field:text-accent-primary transition-colors" />
-                    <input
-                      required
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="john@company.com"
-                      className="w-full bg-background border border-border rounded-xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all text-lg"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">Phone Number <span className="text-[10px] lowercase font-medium opacity-60 ml-1">(Optional)</span></label>
-                  <div className="relative group/field">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted group-focus-within/field:text-accent-primary transition-colors z-20 pointer-events-none" />
-                    <div className="flex w-full bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-accent-primary/20 focus-within:border-accent-primary transition-all overflow-hidden">
-                      <div className="relative flex items-center border-r border-border bg-foreground/[0.02]">
-                        <select
-                          value={countryCode}
-                          onChange={(e) => setCountryCode(e.target.value)}
-                          className="bg-transparent py-4 pl-12 pr-4 focus:outline-none text-lg cursor-pointer appearance-none font-medium text-foreground relative z-10"
-                        >
-                          <option value="+91">🇮🇳 +91</option>
-                          <option value="+1">🇺🇸 +1</option>
-                        </select>
-                        <div className="absolute right-0.5 pointer-events-none text-foreground-muted">
-                          <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </div>
-                      </div>
+              <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+                {/* Row 1: Full Name + Email */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">Full Name</label>
+                    <div className="relative">
+                      <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted transition-colors" />
                       <input
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                        placeholder="9876543210"
-                        className="w-full bg-transparent py-4 px-4 focus:outline-none text-lg text-foreground placeholder:text-foreground-muted/50"
+                        required
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="John Doe"
+                        className="w-full bg-background border border-border rounded-xl py-3.5 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">Email Address</label>
+                    <div className="relative">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted transition-colors" />
+                      <input
+                        required
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="john@company.com"
+                        className="w-full bg-background border border-border rounded-xl py-3.5 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all"
                       />
                     </div>
                   </div>
                 </div>
 
+                {/* Row 2: Business Name + Phone */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">
+                      {contact.form.businessNameLabel} <span className="text-[10px] lowercase font-medium opacity-60 ml-1">(Optional)</span>
+                    </label>
+                    <div className="relative">
+                      <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted transition-colors" />
+                      <input
+                        type="text"
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
+                        placeholder={contact.form.businessNamePlaceholder}
+                        className="w-full bg-background border border-border rounded-xl py-3.5 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">
+                      Phone <span className="text-[10px] lowercase font-medium opacity-60 ml-1">(Optional)</span>
+                    </label>
+                    <div className="relative group/field">
+                      <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted transition-colors z-20 pointer-events-none" />
+                      <div className="flex w-full bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-accent-primary/20 focus-within:border-accent-primary transition-all overflow-hidden">
+                        <div className="relative flex items-center border-r border-border bg-foreground/[0.02] shrink-0">
+                          <select
+                            value={countryCode}
+                            onChange={(e) => setCountryCode(e.target.value)}
+                            className="bg-transparent py-3.5 pl-11 pr-3 focus:outline-none cursor-pointer appearance-none font-medium text-foreground relative z-10 text-sm"
+                          >
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+1">🇺🇸 +1</option>
+                          </select>
+                          <div className="absolute right-0.5 pointer-events-none text-foreground-muted">
+                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </div>
+                        <input
+                          type="tel"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                          placeholder="9876543210"
+                          className="w-full min-w-0 bg-transparent py-3.5 px-3 focus:outline-none text-foreground placeholder:text-foreground-muted/50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 3: Full width textarea */}
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-foreground-muted uppercase tracking-widest ml-1">What Would You Like To Automate?</label>
                   <div className="relative">
-                    <MessageSquare className="absolute left-4 top-5 w-5 h-5 text-foreground-muted group-focus-within/field:text-accent-primary transition-colors" />
+                    <MessageSquare className="absolute left-4 top-4 w-4 h-4 text-foreground-muted transition-colors" />
                     <textarea
                       required
-                      rows={4}
+                      rows={3}
                       value={idea}
                       onChange={(e) => setIdea(e.target.value)}
                       placeholder="Example: I want to automate WhatsApp lead follow-ups."
-                      className="w-full bg-background border border-border rounded-xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all text-lg resize-none"
+                      className="w-full bg-background border border-border rounded-xl py-3.5 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all resize-none"
                     ></textarea>
                   </div>
                 </div>
