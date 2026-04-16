@@ -179,6 +179,14 @@ export const pageContent = {
       buttonText: "Send Idea",
       businessNameLabel: "Business Name",
       businessNamePlaceholder: "Acme Corp, The Coffee House, etc."
+    },
+    booking: {
+      successTitle: "Idea Sent!",
+      successSubtitle: "We'll get back to you shortly. Want to skip the wait?",
+      ctaButton: "Book a Free 20-Min Call",
+      sendAnotherText: "Send Another Message",
+      iframeTitle: "Pick a Time That Works",
+      backText: "Back",
     }
   },
   legal: {
