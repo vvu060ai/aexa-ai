@@ -275,7 +275,7 @@ export const ContactSection = React.memo(() => {
                     <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-accent-primary" /> No obligation</span>
                   </div>
                   <p className="text-xs font-medium text-foreground-muted/50 py-1 px-3 border border-border/30 rounded-full italic">
-                    We&apos;ll reply within 24 hours.
+                    You will recieve an email or call shortly.
                   </p>
                 </div>
               </form>

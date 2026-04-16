@@ -2,7 +2,6 @@ import { GoogleGenAI } from "@google/genai";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { NextResponse } from "next/server";
-import sharp from "sharp";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
@@ -48,9 +47,8 @@ Use this exact structure:
 }`;
 
 export async function POST() {
-  const invoicePath = join(process.cwd(), "public", "invoice-demo.svg");
-  const svgBuffer = readFileSync(invoicePath);
-  const pngBuffer = await sharp(svgBuffer).png().toBuffer();
+  const invoicePath = join(process.cwd(), "public", "invoice-demo.png");
+  const pngBuffer = readFileSync(invoicePath);
   const base64Image = pngBuffer.toString("base64");
 
   const response = await ai.models.generateContent({

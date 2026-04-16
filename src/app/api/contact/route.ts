@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
   const webhookUrl = process.env.CONTACT_WEBHOOK_URL;
   if (webhookUrl) {
-    fetch(webhookUrl, {
+    await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

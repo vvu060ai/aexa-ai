@@ -5,12 +5,15 @@ import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 import { Zap } from 'lucide-react';
 import { pageContent } from '@/data/pageContent';
 import { Icon } from '@/components/ui/Icon';
+import { FloatingPaths } from '@/components/ui/background-paths';
 
 export const BusinessProblemSection = React.memo(() => {
   const { businessProblems } = pageContent;
 
   return (
     <section className="scroll-section py-32 border-b border-border bg-background relative overflow-hidden group/section">
+      <FloatingPaths position={1} />
+      <FloatingPaths position={-2} />
       <div className="container mx-auto px-4 z-10 relative">
         <div className="scroll-header text-center max-w-4xl mx-auto mb-20">
           <h2 className="text-4xl lg:text-5xl font-bold leading-tight mb-6 tracking-tight">

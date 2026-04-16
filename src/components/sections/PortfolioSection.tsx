@@ -90,17 +90,17 @@ export const PortfolioSection = React.memo(() => {
       case 'invoiceextract':
         return (
           <div className="flex justify-between items-center w-full">
-            <div className="flex items-center gap-2 text-[10px] font-bold text-violet-400">
-              <div className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse"></div> AI Ready
+            <div className="flex items-center gap-2 text-[10px] font-bold text-accent-primary">
+              <div className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-pulse"></div> AI Ready
             </div>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setIsInvoiceDemoOpen(true);
               }}
-              className="text-violet-400 font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-300 group"
+              className="text-accent-primary font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-300 group"
             >
-              <Sparkles className="w-3 h-3 group-hover:text-violet-300 transition-colors" />
+              <Sparkles className="w-3 h-3 group-hover:text-accent-primary/70 transition-colors" />
               Try Live Demo
             </button>
           </div>
@@ -108,15 +108,15 @@ export const PortfolioSection = React.memo(() => {
       case 'website':
         return (
           <div className="flex justify-between items-center w-full">
-            <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-400">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div> Live
+            <div className="flex items-center gap-2 text-[10px] font-bold text-accent-primary">
+              <div className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-pulse"></div> Live
             </div>
             <a
               href={(proj as any).url}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-emerald-400 font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-300"
+              className="text-accent-primary font-bold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-300"
             >
               Visit Site <ExternalLink className="w-3 h-3" />
             </a>
@@ -147,7 +147,7 @@ export const PortfolioSection = React.memo(() => {
           setActiveDemoTitle(proj.title);
           setIsDemoOpen(true);
         }}
-        className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm transition-all duration-300 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-[0.98] group"
+        className="w-full cursor-pointer flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-accent-primary/90 hover:bg-accent-primary/70 text-background font-bold text-sm transition-all duration-300 shadow-[0_0_15px_var(--glow-color)] hover:shadow-[0_0_22px_var(--glow-color)] hover:scale-[1.02] active:scale-[0.98] group"
       >
         <div className="relative">
           <Mic className="w-5 h-5" />
@@ -161,7 +161,7 @@ export const PortfolioSection = React.memo(() => {
           e.stopPropagation();
           setIsInvoiceDemoOpen(true);
         }}
-        className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-400 hover:to-purple-500 text-white font-bold text-sm transition-all duration-300 shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 hover:scale-[1.02] active:scale-[0.98] group"
+        className="w-full cursor-pointer flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-accent-primary hover:bg-accent-primary/90 text-background font-bold text-sm transition-all duration-300 shadow-[0_0_15px_var(--glow-color)] hover:shadow-[0_0_22px_var(--glow-color)] hover:scale-[1.02] active:scale-[0.98] group"
       >
         <Sparkles className="w-5 h-5" />
         Try Live Demo
@@ -172,7 +172,7 @@ export const PortfolioSection = React.memo(() => {
         target="_blank"
         rel="noopener noreferrer"
         onClick={(e) => e.stopPropagation()}
-        className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-sm transition-all duration-300 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98]"
+        className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-accent-primary hover:bg-accent-primary/90 text-background font-bold text-sm transition-all duration-300 shadow-[0_0_15px_var(--glow-color)] hover:shadow-[0_0_22px_var(--glow-color)] hover:scale-[1.02] active:scale-[0.98]"
       >
         <Globe className="w-5 h-5" />
         Visit Live Site
@@ -188,7 +188,7 @@ export const PortfolioSection = React.memo(() => {
   return (
     <section id="portfolio" className="scroll-section py-32 border-b border-border bg-background relative overflow-hidden">
       <div className="container mx-auto px-4 z-10 relative">
-        <div className="scroll-header mb-24 text-center">
+        <div className="scroll-header mb-8 md:mb-24 text-center">
           <h2 className="text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
             {portfolio.header.titleParts[0]} <span className="text-accent-primary text-glow">{portfolio.header.titleHighlight}</span> {portfolio.header.titleParts[1]}
           </h2>

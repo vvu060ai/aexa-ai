@@ -73,18 +73,34 @@ html {
     transform: translateZ(0) rotate(360deg);
     }
   }
-  --animate-rippling: rippling var(--duration) ease-out
-;
+  --animate-rippling: rippling var(--duration) ease-out;
   @keyframes rippling {
-  0% {
-    opacity: 1;
-    transform: scale(0);
-    }
-  100% {
-    transform: scale(2);
-    opacity: 0;
-    }
-  }}
+    0% { opacity: 1; transform: scale(0); }
+    100% { transform: scale(2); opacity: 0; }
+  }
+
+  --animate-first: moveVertical 30s ease infinite;
+  --animate-second: moveInCircle 20s reverse infinite;
+  --animate-third: moveInCircle 40s linear infinite;
+  --animate-fourth: moveHorizontal 40s ease infinite;
+  --animate-fifth: moveInCircle 20s ease infinite;
+
+  @keyframes moveVertical {
+    0%   { transform: translateY(-50%); }
+    50%  { transform: translateY(50%); }
+    100% { transform: translateY(-50%); }
+  }
+  @keyframes moveInCircle {
+    0%   { transform: rotate(0deg); }
+    50%  { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes moveHorizontal {
+    0%   { transform: translateX(-50%) translateY(-10%); }
+    50%  { transform: translateX(50%) translateY(10%); }
+    100% { transform: translateX(-50%) translateY(-10%); }
+  }
+}
 
 @layer base {
 
@@ -101,6 +117,7 @@ html {
     --accent-warm: #D97706;
     --glow-color: rgba(245, 158, 11, 0.3);
     --glow-warm: rgba(217, 119, 6, 0.25);
+    --glow-hue: 37;
     --hero-orb-color: radial-gradient(ellipse at top right, rgba(217, 119, 6, 0.12) 0%, rgba(245, 158, 11, 0.08) 50%, transparent 70%);
 
     /* Shadcn / Magic UI vars */
@@ -134,6 +151,7 @@ html {
     --accent-warm: #FF8C59;
     --glow-color: rgba(0, 224, 198, 0.45);
     --glow-warm: rgba(255, 140, 89, 0.3);
+    --glow-hue: 174;
     --hero-orb-color: radial-gradient(ellipse at top right, rgba(0, 224, 198, 0.09) 0%, rgba(0, 160, 140, 0.05) 50%, transparent 70%);
 
     /* Shadcn / Magic UI vars */

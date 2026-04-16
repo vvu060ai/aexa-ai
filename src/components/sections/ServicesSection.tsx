@@ -1,16 +1,57 @@
 "use client";
 
 import React from 'react';
-import { WobbleCard } from "@/components/ui/wobble-card";
+import { useTheme } from 'next-themes';
+import { GlowCard } from "@/components/ui/spotlight-card";
+import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { CheckCircle2 } from 'lucide-react';
 import { pageContent } from '@/data/pageContent';
 import { Icon } from '@/components/ui/Icon';
+import { FallingPattern } from '@/components/ui/falling-pattern';
+
+const darkColors = {
+  gradientBackgroundStart: "transparent",
+  gradientBackgroundEnd: "transparent",
+  firstColor:   "0, 224, 198",   // teal primary
+  secondColor:  "0, 160, 140",   // deep teal
+  thirdColor:   "0, 200, 180",   // mid teal
+  fourthColor:  "255, 140, 89",  // warm accent
+  fifthColor:   "0, 100, 90",    // darkest teal
+  pointerColor: "0, 224, 198",
+  blendingValue: "hard-light",
+};
+
+const lightColors = {
+  gradientBackgroundStart: "transparent",
+  gradientBackgroundEnd: "transparent",
+  firstColor:   "245, 163, 21",  // golden primary
+  secondColor:  "217, 119, 6",   // amber
+  thirdColor:   "250, 190, 60",  // light gold
+  fourthColor:  "255, 140, 50",  // warm orange
+  fifthColor:   "200, 90, 0",    // deep amber
+  pointerColor: "245, 158, 11",
+  blendingValue: "soft-light",
+};
 
 export const ServicesSection = React.memo(() => {
   const { services } = pageContent;
+  const { resolvedTheme } = useTheme();
+  const colors = resolvedTheme === 'dark' ? darkColors : lightColors;
 
   return (
-    <section id="services" className="scroll-section py-32 border-b border-border bg-background relative">
+    <section id="services" className="scroll-section py-32 border-b border-border bg-background relative overflow-hidden">
+      {/* Layer 0 — floating gradient blobs */}
+      <BackgroundGradientAnimation
+        {...colors}
+        size="60%"
+        interactive={false}
+        containerClassName="absolute inset-0 z-0 pointer-events-none opacity-30"
+      />
+      <FallingPattern
+        className="absolute inset-0 z-[1] opacity-40 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,var(--background)_80%)]"
+        duration={120}
+        density={1.5}
+      />
       <div className="container mx-auto px-4 z-10 relative">
         <div className="scroll-header mb-20 text-center flex flex-col items-center">
           <h2 className="text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
@@ -22,34 +63,28 @@ export const ServicesSection = React.memo(() => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
           {services.items.map((item, i) => {
             const colSpanClass = item.colSpan === 2 ? 'md:col-span-2' : 'md:col-span-1';
-            const bgClass = i === 0 || i === 3 
-              ? 'bg-accent-primary/5 border-accent-primary/20' 
-              : 'bg-surface border-border';
 
             return (
-              <WobbleCard
-                key={i}
-                containerClassName={`scroll-card ${colSpanClass} ${bgClass} border min-h-[380px] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:border-accent-primary/50 group overflow-hidden`}
-                className="p-8 lg:p-12"
-              >
-                <div className="relative z-10 flex flex-col h-full">
-                  <div className="animate-float shrink-0 mb-8" style={{ animationDelay: item.delay }}>
-                    <Icon name={item.icon} className="w-20 h-20 object-contain transform group-hover:scale-110 transition-transform duration-500" priority={false} />
-                  </div>
-                  
-                  <div className="flex flex-col">
-                    <h3 className={`${item.colSpan === 2 ? 'text-3xl lg:text-4xl' : 'text-2xl'} font-bold mb-4 tracking-tight`}>
-                      {item.title}
-                    </h3>
-                    <p className={`text-foreground-muted leading-relaxed ${item.colSpan === 2 ? 'text-lg max-w-xl' : 'text-base'}`}>
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
+              <GlowCard key={i} borderOnly glowColor="teal" className={`scroll-card ${colSpanClass}`}>
+                <div className="group relative flex flex-col h-full min-h-[380px] rounded-2xl bg-surface-card border border-border overflow-hidden p-8 lg:p-12 shadow-[0_4px_24px_rgba(0,0,0,0.35)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.5)] hover:border-accent-primary/40 transition-all duration-500">
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="animate-float shrink-0 mb-8" style={{ animationDelay: item.delay }}>
+                      <Icon name={item.icon} className="w-20 h-20 object-contain" priority={false} />
+                    </div>
 
-                {/* Subtle Background Glow */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-accent-primary/5 blur-[100px] -z-10 group-hover:bg-accent-primary/10 transition-colors duration-700"></div>
-              </WobbleCard>
+                    <div className="flex flex-col">
+                      <h3 className={`${item.colSpan === 2 ? 'text-3xl lg:text-4xl' : 'text-2xl'} font-bold mb-4 tracking-tight`}>
+                        {item.title}
+                      </h3>
+                      <p className={`text-foreground-muted leading-relaxed ${item.colSpan === 2 ? 'text-lg max-w-xl' : 'text-base'}`}>
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-accent-primary/5 blur-[100px] -z-10 group-hover:bg-accent-primary/10 transition-colors duration-700" />
+                </div>
+              </GlowCard>
             );
           })}
         </div>

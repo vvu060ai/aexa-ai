@@ -1,6 +1,6 @@
 export const pageContent = {
   hero: {
-    headlineParts: ["Run Your Business on", ""],
+    headlineParts: ["Run Your Business"],
     headlineHighlight: "Autopilot.",
     subheadline: "We build AI systems that handle your bookings, lead follow-ups, invoices, and customer support — so your team focuses on growth, not busywork.",
     buttons: {
@@ -8,7 +8,7 @@ export const pageContent = {
       secondary: { text: "See Live Demos", link: "#portfolio" }
     },
     trustBadges: [
-      { text: "Live in 48 hrs", icon: "Clock" },
+      { text: "Live in 1 week", icon: "Clock" },
       { text: "Your data stays yours", icon: "ShieldCheck" },
       { text: "30-day results guarantee", icon: "CheckCircle2" }
     ],
@@ -106,12 +106,12 @@ export const pageContent = {
     },
     projects: [
       {
-        title: "Restaurant Booking Agent — Emily",
+        title: "Restaurant Booking Agent — Sofia",
         src: "/portfolio/restaurant-agent.png",
         badge: "Voice AI",
         icon: "call-ringing",
         iconDelay: "1.6s",
-        description: "Emily is a voice AI agent for restaurants. She checks live table availability, takes reservations, handles special requests, and suggests alternatives when your preferred slot is full.",
+        description: "Sofia is a voice AI agent for restaurants. She checks live table availability, takes reservations, handles special requests, and suggests alternatives when your preferred slot is full.",
         footerType: "voiceagent",
         category: "agent",
         agentId: "1a1e4be8-ad23-4f77-b3a5-14bada886f47"
@@ -170,13 +170,13 @@ export const pageContent = {
     stats: [
       { metric: "70%", label: "Less manual work", icon: "flash", delay: "0s" },
       { metric: "3×", label: "Faster lead response", icon: "rocket", delay: "0.4s" },
-      { metric: "48 hrs", label: "Automation setup", icon: "clock", delay: "0.8s" },
+      { metric: "1 week", label: "Automation setup", icon: "clock", delay: "0.8s" },
       { metric: "24/7", label: "AI-powered customer support", icon: "chat-bubble", delay: "1.2s" }
     ],
     form: {
       title: "Tell Us What You Want Automated",
       subtitle: "Describe one thing you wish ran by itself. We'll show you exactly how to make it happen.",
-      buttonText: "Send My Automation Idea",
+      buttonText: "Send Idea",
       businessNameLabel: "Business Name",
       businessNamePlaceholder: "Acme Corp, The Coffee House, etc."
     }
