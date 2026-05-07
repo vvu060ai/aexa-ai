@@ -49,6 +49,7 @@ export const createCalendarEvent = async (details: {
   email: string;
   problem: string;
   appointmentTime: string;
+  summary?: string;
 }) => {
   const calendar = getCalendar();
   const startTime = new Date(details.appointmentTime);
@@ -58,7 +59,7 @@ export const createCalendarEvent = async (details: {
     const response = await calendar.events.insert({
       calendarId: CALENDAR_ID,
       requestBody: {
-        summary: `Dental Appointment - ${details.name}`,
+        summary: details.summary ?? `Dental Appointment - ${details.name}`,
         description: `Patient: ${details.name}\nPhone: ${details.phone}\nEmail: ${details.email}\nProblem: ${details.problem}`,
         start: { dateTime: startTime.toISOString() },
         end: { dateTime: endTime.toISOString() },

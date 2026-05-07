@@ -7,12 +7,8 @@ export async function POST(request: Request) {
     console.log('--- Incoming Vapi Tool Call (Check Availability) ---');
     console.log(JSON.stringify(body, null, 2));
 
-    const { appointment_time } = body.message?.toolCalls?.[0]?.function?.arguments || body;
-    
-    // Fallback if the body structure is straight JSON vs Vapi's specific payload format
-    const timeToCheck = typeof appointment_time === 'string' 
-      ? appointment_time 
-      : body.appointment_time;
+    const args = body.message?.toolCalls?.[0]?.function?.arguments || body;
+    const timeToCheck = args.datetime || args.appointment_time;
 
     if (!timeToCheck) {
       return NextResponse.json(
