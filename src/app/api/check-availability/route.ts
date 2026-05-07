@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { checkAvailability } from '@/lib/calendar';
+import { vapiResponse } from '@/lib/vapi';
 
 export async function POST(request: Request) {
   try {
@@ -7,30 +8,23 @@ export async function POST(request: Request) {
     console.log('--- Incoming Vapi Tool Call (Check Availability) ---');
     console.log(JSON.stringify(body, null, 2));
 
+    const toolCallId = body.message?.toolCalls?.[0]?.id;
     const args = body.message?.toolCalls?.[0]?.function?.arguments || body;
     const timeToCheck = args.datetime || args.appointment_time;
 
     if (!timeToCheck) {
-      return NextResponse.json(
-        { error: 'appointment_time is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'datetime is required' }, { status: 400 });
     }
 
     const isAvailable = await checkAvailability(timeToCheck);
 
     if (isAvailable) {
-      return NextResponse.json({
-        available: true,
-      });
+      return vapiResponse(toolCallId, { available: true });
     } else {
-      // Logic for suggesting alternatives could be implemented here
-      // For now we'll suggest 3 generic times for the next day
       const date = new Date(timeToCheck);
-      date.setDate(date.getDate() + 1); // Tomorrow
-      
+      date.setDate(date.getDate() + 1);
       const tomorrowStr = date.toISOString().split('T')[0];
-      return NextResponse.json({
+      return vapiResponse(toolCallId, {
         available: false,
         suggested_slots: [
           `${tomorrowStr}T10:00:00.000Z`,
@@ -41,9 +35,6 @@ export async function POST(request: Request) {
     }
   } catch (error: any) {
     console.error('Error in /api/check-availability:', error);
-    return NextResponse.json(
-      { error: error.message || 'Error checking availability' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || 'Error checking availability' }, { status: 500 });
   }
 }

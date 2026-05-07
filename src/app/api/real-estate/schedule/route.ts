@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { checkAvailability, createCalendarEvent } from '@/lib/calendar';
+import { vapiResponse } from '@/lib/vapi';
 
 export async function POST(request: Request) {
   try {
@@ -7,6 +8,7 @@ export async function POST(request: Request) {
     console.log('--- Incoming Vapi Tool Call (RE Schedule) ---');
     console.log(JSON.stringify(body, null, 2));
 
+    const toolCallId = body.message?.toolCalls?.[0]?.id;
     const args = body.message?.toolCalls?.[0]?.function?.arguments || body;
     const { name, phone, project, datetime } = args;
 
@@ -19,10 +21,7 @@ export async function POST(request: Request) {
 
     const isAvailable = await checkAvailability(datetime);
     if (!isAvailable) {
-      return NextResponse.json({
-        success: false,
-        error: 'Slot not available',
-      });
+      return vapiResponse(toolCallId, { success: false, error: 'Slot not available' });
     }
 
     await createCalendarEvent({
@@ -34,12 +33,9 @@ export async function POST(request: Request) {
       summary: `Site Visit - ${project} - ${name}`,
     });
 
-    return NextResponse.json({ success: true, message: 'Site visit booked successfully' });
+    return vapiResponse(toolCallId, { success: true, message: 'Site visit booked successfully' });
   } catch (error: any) {
     console.error('Error in /api/real-estate/schedule:', error);
-    return NextResponse.json(
-      { error: error.message || 'Error booking site visit' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || 'Error booking site visit' }, { status: 500 });
   }
 }

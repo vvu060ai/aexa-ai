@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cancelCalendarEvent } from '@/lib/calendar';
+import { vapiResponse } from '@/lib/vapi';
 
 export async function POST(request: Request) {
   try {
@@ -7,6 +8,7 @@ export async function POST(request: Request) {
     console.log('--- Incoming Vapi Tool Call (RE Cancel) ---');
     console.log(JSON.stringify(body, null, 2));
 
+    const toolCallId = body.message?.toolCalls?.[0]?.id;
     const args = body.message?.toolCalls?.[0]?.function?.arguments || body;
     const { datetime } = args;
 
@@ -16,12 +18,9 @@ export async function POST(request: Request) {
 
     await cancelCalendarEvent(datetime);
 
-    return NextResponse.json({ success: true, message: 'Site visit cancelled successfully' });
+    return vapiResponse(toolCallId, { success: true, message: 'Site visit cancelled successfully' });
   } catch (error: any) {
     console.error('Error in /api/real-estate/cancel:', error);
-    return NextResponse.json(
-      { error: error.message || 'Error cancelling site visit' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || 'Error cancelling site visit' }, { status: 500 });
   }
 }

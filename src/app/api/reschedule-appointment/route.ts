@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { checkAvailability, rescheduleCalendarEvent } from '@/lib/calendar';
+import { vapiResponse } from '@/lib/vapi';
 
 export async function POST(request: Request) {
   try {
@@ -7,6 +8,7 @@ export async function POST(request: Request) {
     console.log('--- Incoming Vapi Tool Call (Reschedule Appointment) ---');
     console.log(JSON.stringify(body, null, 2));
 
+    const toolCallId = body.message?.toolCalls?.[0]?.id;
     const args = body.message?.toolCalls?.[0]?.function?.arguments || body;
     const { current_appointment_time, new_appointment_time } = args;
 
@@ -18,12 +20,11 @@ export async function POST(request: Request) {
     }
 
     const isAvailable = await checkAvailability(new_appointment_time);
-
     if (!isAvailable) {
       const date = new Date(new_appointment_time);
       date.setDate(date.getDate() + 1);
       const tomorrowStr = date.toISOString().split('T')[0];
-      return NextResponse.json({
+      return vapiResponse(toolCallId, {
         status: 'unavailable',
         message: 'That time is not available. Here are some alternatives.',
         suggested_slots: [
@@ -36,15 +37,9 @@ export async function POST(request: Request) {
 
     await rescheduleCalendarEvent(current_appointment_time, new_appointment_time);
 
-    return NextResponse.json({
-      status: 'success',
-      message: 'Appointment successfully rescheduled',
-    });
+    return vapiResponse(toolCallId, { success: true, message: 'Appointment successfully rescheduled' });
   } catch (error: any) {
     console.error('Error in /api/reschedule-appointment:', error);
-    return NextResponse.json(
-      { error: error.message || 'Error rescheduling appointment' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || 'Error rescheduling appointment' }, { status: 500 });
   }
 }
