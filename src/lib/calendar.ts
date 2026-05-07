@@ -1,37 +1,29 @@
 import { google } from 'googleapis';
 
-export const getGoogleCalendarClient = () => {
-  const oAuth2Client = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    'https://developers.google.com/oauthplayground' // Redirect URI set previously
-  );
-
-  oAuth2Client.setCredentials({
-    refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
+const getCalendar = () => {
+  const auth = new google.auth.GoogleAuth({
+    credentials: JSON.parse(
+      Buffer.from(process.env.GOOGLE_SERVICE_ACCOUNT_KEY!, 'base64').toString()
+    ),
+    scopes: ['https://www.googleapis.com/auth/calendar'],
   });
-
-  return google.calendar({ version: 'v3', auth: oAuth2Client });
+  return google.calendar({ version: 'v3', auth });
 };
 
+const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID || 'primary';
+
 export const checkAvailability = async (appointmentTime: string) => {
-  const calendar = getGoogleCalendarClient();
-  const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
-  
-  // Parse the time or assume it's valid format (e.g. ISO)
-  let startTime;
+  const calendar = getCalendar();
+
+  let startTime: Date;
   try {
     startTime = new Date(appointmentTime);
-    if (isNaN(startTime.getTime())) {
-       // if not a valid date, we throw
-       throw new Error('Invalid date');
-    }
-  } catch(e) {
-    console.error("Invalid time requested:", appointmentTime);
+    if (isNaN(startTime.getTime())) throw new Error('Invalid date');
+  } catch {
+    console.error('Invalid time requested:', appointmentTime);
     return false;
   }
 
-  // Check 30 minute slot
   const endTime = new Date(startTime.getTime() + 30 * 60000);
 
   try {
@@ -40,14 +32,13 @@ export const checkAvailability = async (appointmentTime: string) => {
         timeMin: startTime.toISOString(),
         timeMax: endTime.toISOString(),
         timeZone: 'UTC',
-        items: [{ id: calendarId }],
+        items: [{ id: CALENDAR_ID }],
       },
     });
-
-    const busySlots = response.data.calendars?.[calendarId]?.busy || [];
+    const busySlots = response.data.calendars?.[CALENDAR_ID]?.busy || [];
     return busySlots.length === 0;
   } catch (error) {
-    console.error('Error checking Google Calendar availability:', error);
+    console.error('Error checking availability:', error);
     throw error;
   }
 };
@@ -59,30 +50,76 @@ export const createCalendarEvent = async (details: {
   problem: string;
   appointmentTime: string;
 }) => {
-  const calendar = getGoogleCalendarClient();
-  const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
-
+  const calendar = getCalendar();
   const startTime = new Date(details.appointmentTime);
-  const endTime = new Date(startTime.getTime() + 30 * 60000); // 30 mins
+  const endTime = new Date(startTime.getTime() + 30 * 60000);
 
   try {
     const response = await calendar.events.insert({
-      calendarId: calendarId,
+      calendarId: CALENDAR_ID,
       requestBody: {
         summary: `Dental Appointment - ${details.name}`,
         description: `Patient: ${details.name}\nPhone: ${details.phone}\nEmail: ${details.email}\nProblem: ${details.problem}`,
-        start: {
-          dateTime: startTime.toISOString(),
-        },
-        end: {
-          dateTime: endTime.toISOString(),
-        },
+        start: { dateTime: startTime.toISOString() },
+        end: { dateTime: endTime.toISOString() },
       },
     });
-
     return response.data;
   } catch (error) {
-    console.error('Error creating Google Calendar event:', error);
+    console.error('Error creating calendar event:', error);
     throw error;
   }
+};
+
+const findEventNearTime = async (appointmentTime: string) => {
+  const calendar = getCalendar();
+  const target = new Date(appointmentTime);
+  const timeMin = new Date(target.getTime() - 5 * 60000);
+  const timeMax = new Date(target.getTime() + 5 * 60000);
+
+  const response = await calendar.events.list({
+    calendarId: CALENDAR_ID,
+    timeMin: timeMin.toISOString(),
+    timeMax: timeMax.toISOString(),
+    singleEvents: true,
+    orderBy: 'startTime',
+  });
+
+  const events = response.data.items || [];
+  if (events.length === 0) throw new Error('No event found near that time');
+  return events[0];
+};
+
+export const rescheduleCalendarEvent = async (
+  currentTime: string,
+  newTime: string
+) => {
+  const calendar = getCalendar();
+  const event = await findEventNearTime(currentTime);
+  if (!event.id) throw new Error('Event has no ID');
+
+  const newStart = new Date(newTime);
+  const newEnd = new Date(newStart.getTime() + 30 * 60000);
+
+  const response = await calendar.events.update({
+    calendarId: CALENDAR_ID,
+    eventId: event.id,
+    requestBody: {
+      ...event,
+      start: { dateTime: newStart.toISOString() },
+      end: { dateTime: newEnd.toISOString() },
+    },
+  });
+  return response.data;
+};
+
+export const cancelCalendarEvent = async (appointmentTime: string) => {
+  const calendar = getCalendar();
+  const event = await findEventNearTime(appointmentTime);
+  if (!event.id) throw new Error('Event has no ID');
+
+  await calendar.events.delete({
+    calendarId: CALENDAR_ID,
+    eventId: event.id,
+  });
 };
